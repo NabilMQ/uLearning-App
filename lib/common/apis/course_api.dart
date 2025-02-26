@@ -22,7 +22,7 @@ class CourseAPI {
 
   static Future <BaseResponseEntity> coursePay({CourseRequestEntity? params}) async {
     var response = await HttpUtil().post(
-      '/api/checkout/stripe',
+      '/api/checkout/xendit',
       queryParameters: params?.toJson(),
     );
 
