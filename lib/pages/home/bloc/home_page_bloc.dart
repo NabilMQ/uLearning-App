@@ -30,7 +30,7 @@ class HomePageBloc extends Bloc <HomePageEvents, HomePageStates> {
       state.copyWith(
         courseItem: event.courseItem,
         state: event.state,
-      )
+      ),
     );
   }
 }

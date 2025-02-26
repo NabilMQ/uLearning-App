@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ulearning_app/common/debug/debug.dart';
 import 'package:ulearning_app/common/entities/course.dart';
 import 'package:ulearning_app/common/routes/routes.dart';
 import 'package:ulearning_app/common/values/colors.dart';
@@ -321,7 +322,7 @@ Widget menuView({
               context: context,
             ),
             _reusableMenuText(
-              text: "Newest",
+              text: "Cheapest",
               fontWeight: FontWeight.normal,
               fontSize: 11,
               index: 2,
@@ -356,7 +357,23 @@ Widget _reusableMenuText({
       child: InkWell(
         borderRadius: BorderRadius.circular(7.w),
         onTap: () {
-          context.read<HomePageBloc>().add(HomePageFilter(filterIndex: index));
+          context.read<HomePageBloc>().add(
+            HomePageFilter(filterIndex: index)
+          );
+          List <CourseItem> courseItems = context.read<HomePageBloc>().state.courseItem;
+          if (index == 1) {
+            courseItems.sort((a, b) => -(a.follow?.compareTo(b.follow!))!);
+          }
+          else if (index == 2) {
+            courseItems.sort((a, b) => double.parse(a.price!).compareTo(double.parse(b.price!)));
+          }
+          else {
+            courseItems.sort((a, b) => a.name?.compareTo(b.name!) ?? 0);
+          }
+
+          context.read<HomePageBloc>().add(
+            HomePageCourseItem(courseItem: courseItems),
+          );
         },
         child: Container(
           padding: EdgeInsets.only(
@@ -460,6 +477,40 @@ Widget courseGrid({
                         ),
                         child: Text(
                           state.description.toString(),
+                          maxLines: 1,
+                          textAlign: TextAlign.left,
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: AppColors.primaryFourthElementText,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 8.sp,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: 5.h,
+                        ),
+                        child: Text(
+                          state.price.toString(),
+                          maxLines: 1,
+                          textAlign: TextAlign.left,
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: AppColors.primaryFourthElementText,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 8.sp,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: 5.h,
+                        ),
+                        child: Text(
+                          state.follow.toString(),
                           maxLines: 1,
                           textAlign: TextAlign.left,
                           softWrap: false,
