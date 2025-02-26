@@ -36,21 +36,26 @@ class CourseDetailController {
     }
   }
 
-  Future <String> goBuy(int? id) async {
+  Future <String> goBuy(int? courseId, int? userId, String? courseName, String? userEmail, double? amount) async {
     EasyLoading.show(
       indicator: CircularProgressIndicator(),
       maskType: EasyLoadingMaskType.clear,
       dismissOnTap: true,
     );
+    
+    var result = await CourseAPI.coursePay(
+      courseId: courseId!,
+      userId: userId!,
+      userEmail: userEmail,
+      courseName: courseName,
+      amount: amount!,
 
-    CourseRequestEntity courseRequestEntity = CourseRequestEntity();
-    courseRequestEntity.id = id;
-    var result = await CourseAPI.coursePay(params: courseRequestEntity); 
+    ); 
 
     EasyLoading.dismiss();
 
-    if (result.code == 200) {
-      var url = Uri.decodeFull(result.data!);
+    if (result.message == "Invoice created") {
+      var url = Uri.decodeFull(result.checkout_link!);
       return url;
     }
     else {

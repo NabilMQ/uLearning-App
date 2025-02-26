@@ -35,3 +35,24 @@ class BindFcmTokenRequestEntity {
     "fcmtoken": fcmtoken,
   };
 }
+
+class BaseResponseEntityXendit {
+  String? message;
+  String? checkout_link;
+
+  BaseResponseEntityXendit({
+    this.message,
+    this.checkout_link,
+  });
+
+  factory BaseResponseEntityXendit.fromJson(Map<String, dynamic> json) =>
+      BaseResponseEntityXendit(
+        message: json["message"],
+        checkout_link: json["checkout_link"],
+      );
+
+  Map<String, dynamic> toJson() => {
+    "message": message,
+    "checkout_link": checkout_link,
+  };
+}

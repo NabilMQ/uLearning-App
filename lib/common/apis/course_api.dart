@@ -20,12 +20,24 @@ class CourseAPI {
     return CourseDetailResponseEntity.fromJson(response);
   }
 
-  static Future <BaseResponseEntity> coursePay({CourseRequestEntity? params}) async {
+  static Future <BaseResponseEntityXendit> coursePay({
+    required int courseId,
+    required int userId,
+    required double amount,
+    required userEmail,
+    required courseName,
+  }) async {
     var response = await HttpUtil().post(
       '/api/checkout/xendit',
-      queryParameters: params?.toJson(),
+      queryParameters: {
+        "package_id": courseId,
+        "user_id": userId,
+        "amount": amount,
+        "payer_email": userEmail,
+        "description": courseName,
+      },
     );
 
-    return BaseResponseEntity.fromJson(response);
+    return BaseResponseEntityXendit.fromJson(response);
   }
 }

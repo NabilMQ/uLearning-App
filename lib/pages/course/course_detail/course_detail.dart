@@ -145,7 +145,11 @@ class _CourseDetailState extends State<CourseDetail> {
                         
                       goBuyButton(
                         courseDetailController: _courseDetailController,
-                        id: state.courseItem?.id ?? -1,
+                        courseId: state.courseItem?.id ?? -1,
+                        courseName: state.courseItem?.name ?? "Best Course",
+                        userId: -1,
+                        userEmail: "nobody@gmail.com",
+                        amount: double.parse(state.courseItem?.price ?? "1") * 16345,
                       ),
                         
                       Align(

@@ -125,11 +125,21 @@ Widget _iconWIthNumber(String iconPath, num number) {
 
 Widget goBuyButton({
   required CourseDetailController courseDetailController,
-  required int id,
+  required int courseId,
+  required int userId, 
+  required String courseName,
+  required String userEmail,
+  required double? amount,
   }) {
   return ElevatedButton(
     onPressed: () async {
-      var url = await courseDetailController.goBuy(id);
+      var url = await courseDetailController.goBuy(
+        courseId,
+        userId,
+        courseName,
+        userEmail,
+        amount,
+      );
       if (!await launchUrl(Uri.parse(url))) {
         throw Exception('Could not launch $url');
       }
