@@ -1,7 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:ulearning_app/common/debug/debug.dart';
 
 import 'package:ulearning_app/common/values/colors.dart';
+import 'package:ulearning_app/pages/sign_in/sign_in_controller.dart';
 
 AppBar buildAppBar(String title) {
   return AppBar(
@@ -40,17 +45,24 @@ Widget buildThirdPartyLogin(BuildContext context) {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _reusableIcons("assets/icons/google.png"),
+        _reusableIcons(
+          iconPath: "assets/icons/google.png",
+          func: () {
+            SignInController(context: context).handleSignIn("google");
+          }),
 
-        _reusableIcons("assets/icons/apple.png"),
+        _reusableIcons(iconPath: "assets/icons/apple.png"),
 
-        _reusableIcons("assets/icons/facebook.png"),
+        _reusableIcons(iconPath: "assets/icons/facebook.png"),
       ],
     )
   );
 } 
 
-Widget _reusableIcons(String iconPath) {
+Widget _reusableIcons({
+  required String iconPath,
+  Function? func
+}) {
   return SizedBox(
     width: 40.w,
     height: 40.w,
@@ -60,8 +72,10 @@ Widget _reusableIcons(String iconPath) {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(9999),
-        onTap: () {
-
+        onTap: () async {
+          if (func != null) {
+            await func();
+          }
         },
       ),
     ),

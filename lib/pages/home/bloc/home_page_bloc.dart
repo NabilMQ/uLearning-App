@@ -29,6 +29,7 @@ class HomePageBloc extends Bloc <HomePageEvents, HomePageStates> {
     emit(
       state.copyWith(
         courseItem: event.courseItem,
+        state: event.state,
       )
     );
   }

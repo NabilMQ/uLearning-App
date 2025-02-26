@@ -1,4 +1,5 @@
 import 'package:ulearning_app/common/entities/course.dart';
+import 'package:ulearning_app/common/enum/enum.dart';
 
 abstract class HomePageEvents {
   const HomePageEvents();
@@ -17,6 +18,8 @@ class HomePageFilter extends HomePageEvents {
 }
 
 class HomePageCourseItem extends HomePageEvents {
-  const HomePageCourseItem(this.courseItem);
-  final List <CourseItem> courseItem;
+  const HomePageCourseItem({this.courseItem, this.state});
+
+  final List <CourseItem>? courseItem;
+  final StateHandler? state;
 }

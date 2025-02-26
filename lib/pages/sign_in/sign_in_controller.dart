@@ -4,7 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ulearning_app/common/apis/user_api.dart';
+import 'package:ulearning_app/common/debug/debug.dart';
 import 'package:ulearning_app/common/entities/user.dart';
 import 'package:ulearning_app/common/values/constant.dart';
 import 'package:ulearning_app/common/widgets/flutter_toast.dart';
@@ -45,19 +47,6 @@ class SignInController {
             return value;
           });
 
-
-          if (credential.user  == null) {
-            toastInfo(
-              msg: "User does not exist",
-            );
-          }
-
-          if (!credential.user!.emailVerified) {
-            toastInfo(
-              msg: "User email does not verified",
-            );
-          }
-
           var user = credential.user;
           if (user != null) {
             String? displayName = user.displayName;
@@ -73,15 +62,11 @@ class SignInController {
             // type 1 means email login
             loginRequestEntity.type = 1;
 
-            toastInfo(
-              msg: "User exist",
-            );
-
             asyncPostAllData(loginRequestEntity);
           }
           else {
             toastInfo(
-              msg: "User does not exist",
+              msg: "Can't find User",
             );
           }
         } 
@@ -107,6 +92,50 @@ class SignInController {
             );
           }
         }   
+      }
+      else if (type == "google") {
+        try {
+            final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+            final GoogleSignInAuthentication? googleAuth =
+                await googleUser?.authentication;
+
+            final googleCredential = GoogleAuthProvider.credential(
+              accessToken: googleAuth?.accessToken,
+              idToken: googleAuth?.idToken,
+            );
+
+
+            final credential = await FirebaseAuth.instance.signInWithCredential(googleCredential).then((value) {
+              return value;
+            });
+
+            var user = credential.user;
+            if (user != null) {
+              String? displayName = user.displayName;
+              String? email = user.email;
+              String? id = user.uid;
+              String? photoUrl = user.photoURL;
+
+              LoginRequestEntity loginRequestEntity = LoginRequestEntity();
+              loginRequestEntity.avatar = photoUrl;
+              loginRequestEntity.name = displayName;
+              loginRequestEntity.email = email;
+              loginRequestEntity.open_id = id;
+              // type 1 means email login
+              loginRequestEntity.type = 1;
+
+              asyncPostAllData(loginRequestEntity);
+            }
+            else {
+              toastInfo(
+                msg: "Can't find User",
+              );
+            }
+
+          } on Exception catch (e) {
+            debug('exception -> $e');
+          }
       }
     }
     catch (e) {
@@ -140,7 +169,7 @@ class SignInController {
         }
         catch (e) {
           EasyLoading.dismiss();
-          debugPrint("Error when saving to local storage: $e");
+          debug("Error when saving to local storage: $e");
         }
       }
       else {

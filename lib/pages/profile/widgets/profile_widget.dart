@@ -91,7 +91,10 @@ Widget profileIconAndEditButton() {
                     );
                   }
               
-                  return child;
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(8.w),
+                    child: child
+                  );
                 },
                 errorBuilder: (context, error, stackTrace) {
                   return Icon(

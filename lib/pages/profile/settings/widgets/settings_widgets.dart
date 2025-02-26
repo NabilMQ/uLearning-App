@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ulearning_app/common/debug/debug.dart';
 import 'package:ulearning_app/common/routes/names.dart';
 import 'package:ulearning_app/common/values/colors.dart';
@@ -79,14 +80,22 @@ Widget logOutButton(BuildContext context) {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(15.w),
                         onTap: () async {
-                          
                           try {
                             context.read<SignInBloc>().add((ClearBloc()));
                             context.read<AppBloc>().add((TriggerAppEvent(0)));
                             context.read<HomePageBloc>().add((HomePageDots(sliderIndex: 0)));
                             Global.storageService.remove(AppConstants.storageUserProfileKey);
                             Global.storageService.remove(AppConstants.storageUserTokenKey);
-                            await FirebaseAuth.instance.signOut().then((_) {
+                            if (await GoogleSignIn().isSignedIn()) {
+                              await GoogleSignIn().disconnect().onError(
+                                (e, s) {
+                                  debug("error $e");
+                                  debug("error $s");
+                                  return null;
+                                }
+                              );
+                            }
+                            await FirebaseAuth.instance.signOut().then((_) async {
                               if (context.mounted) {
                                 Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.signIn, (route) => false);
                               }
