@@ -1,25 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:ulearning_app/common/debug/debug.dart';
 
 import 'package:ulearning_app/common/values/colors.dart';
 import 'package:ulearning_app/pages/sign_in/sign_in_controller.dart';
 
 AppBar buildAppBar(String title) {
   return AppBar(
-    // bottom: PreferredSize(
-    //   preferredSize: Size.fromHeight(1.0),
-
-    //   child: Container(
-    //     color: Colors.grey.withValues(
-    //       alpha: 1.0,
-    //     ),
-    //     height: 1.0 ,
-    //   ),
-    // ),
     automaticallyImplyLeading: false,
     title: Text(
       title,

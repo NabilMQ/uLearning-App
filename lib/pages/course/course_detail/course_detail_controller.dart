@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:ulearning_app/common/apis/course_api.dart';
-import 'package:ulearning_app/common/debug/debug.dart';
 import 'package:ulearning_app/common/entities/course.dart';
 import 'package:ulearning_app/common/enum/enum.dart';
 import 'package:ulearning_app/pages/course/course_detail/bloc/course_detail_bloc.dart';
